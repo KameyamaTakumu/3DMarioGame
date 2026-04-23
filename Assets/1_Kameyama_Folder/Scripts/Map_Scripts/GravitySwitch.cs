@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// プレイヤーが重力の反転するエリアに入ったときに、Gravity_Logic クラスの ReverseGravity 関数を呼び出すクラス
 public class GravitySwitch : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
@@ -8,12 +9,12 @@ public class GravitySwitch : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // Player タグがついているオブジェクトの Gravity_Logic を取得する
-            Gravity_Logic gravity = other.GetComponent<Gravity_Logic>();
+            GravityLogic _gravity = other.GetComponent<GravityLogic>();
 
-            if (gravity != null)
+            if (_gravity != null)
             {
                 // Gravity_Logic クラスの ReverseGravity 関数を呼び出す
-                gravity.ReverseGravity();
+                _gravity.ReverseGravity();
             }
         }
     }
