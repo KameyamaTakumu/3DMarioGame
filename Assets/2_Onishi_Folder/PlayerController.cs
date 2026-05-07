@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// プレイヤーの移動・ジャンプ・ダッシュを管理するクラス。
@@ -35,6 +36,24 @@ public class PlayerController3D : MonoBehaviour
 
     [Tooltip("重力値（負の値）")]
     public float gravity = -20f;
+
+    [Header("ヒップドロップ")]
+    public float groundPoundSpeed = -35f;
+
+    [Tooltip("停止時間")]
+    public float groundPoundPauseTime = 0.15f;
+
+    [Tooltip("着地硬直")]
+    public float landingLag = 0.2f;
+
+    private bool groundPounding;
+    private bool groundPoundStart;
+    private bool landing;
+
+    private float pauseTimer;
+    private float landingTimer;
+
+    private bool groundPoundPressed;
 
     // ===== 空中制御 =====
     [Header("空中制御")]
@@ -77,6 +96,9 @@ public class PlayerController3D : MonoBehaviour
         // --- ダッシュ入力 ---
         inputActions.Player.Dash.performed += ctx => dashPressed = true;
         inputActions.Player.Dash.canceled += ctx => dashPressed = false;
+
+        // --- ヒップドロップ入力 ---
+        inputActions.Player.GroundPound.performed += ctx => groundPoundPressed = true;
     }
 
     /// <summary>
@@ -94,8 +116,13 @@ public class PlayerController3D : MonoBehaviour
     /// </summary>
     void Update()
     {
-        Jump();
-        MoveAndGravity();
+        GroundPound();
+
+        if (!landing)
+        {
+            Jump();
+            MoveAndGravity();
+        }
     }
 
     void MoveAndGravity()
@@ -115,6 +142,15 @@ public class PlayerController3D : MonoBehaviour
 
         velocity.x = Mathf.Lerp(velocity.x, targetVelocity.x, acceleration * control * Time.deltaTime);
         velocity.z = Mathf.Lerp(velocity.z, targetVelocity.z, acceleration * control * Time.deltaTime);
+
+        // ヒップドロップ中は移動を無効化
+        if (groundPounding || groundPoundStart)
+        {
+            velocity.y += gravity * Time.deltaTime;
+
+            controller.Move(new Vector3(0, velocity.y, 0) * Time.deltaTime);
+            return;
+        }
 
         // 回転
         if (moveDir != Vector3.zero)
@@ -160,5 +196,72 @@ public class PlayerController3D : MonoBehaviour
 
         // 入力フラグをリセット（多重ジャンプ防止）
         //jumpPressed = false;
+    }
+
+    void GroundPound()
+    {
+        // 着地硬直
+        if (landing)
+        {
+            landingTimer -= Time.deltaTime;
+
+            if (landingTimer <= 0)
+            {
+                landing = false;
+            }
+
+            return;
+        }
+
+        // 発動開始
+        if (groundPoundPressed && !controller.isGrounded && !groundPounding)
+        {
+            groundPounding = true;
+            groundPoundStart = true;
+
+            pauseTimer = groundPoundPauseTime;
+
+            velocity = Vector3.zero;
+
+            groundPoundPressed = false;
+        }
+
+        // 一瞬停止
+        if (groundPoundStart)
+        {
+            pauseTimer -= Time.deltaTime;
+
+            if (pauseTimer <= 0)
+            {
+                groundPoundStart = false;
+
+                velocity.y = groundPoundSpeed;
+            }
+
+            controller.Move(Vector3.zero);
+            return;
+        }
+
+        // 落下中
+        if (groundPounding)
+        {
+            velocity.x = 0;
+            velocity.z = 0;
+
+            // 接地したら終了
+            if (controller.isGrounded)
+            {
+                groundPounding = false;
+
+                landing = true;
+                landingTimer = landingLag;
+
+                velocity = Vector3.zero;
+
+                Debug.Log("ヒップドロップ着地！");
+            }
+        }
+
+        groundPoundPressed = false;
     }
 }
