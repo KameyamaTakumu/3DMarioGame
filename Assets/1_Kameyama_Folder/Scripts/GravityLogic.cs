@@ -122,7 +122,7 @@ public class GravityLogic : MonoBehaviour
     GameObject ChooseSecondPlanet()
     {
         // Planet タグがついているオブジェクトをすべて取得
-        planets = GameObject.FindGameObjectsWithTag("planet");
+        planets = GameObject.FindGameObjectsWithTag("Planet");
 
         // 最も近いオブジェクトと二番目に近いオブジェクトを格納する変数を定義
         GameObject nearest = null;
@@ -178,7 +178,7 @@ public class GravityLogic : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             // Ray が当たったオブジェクトの tag が Planet だったら
-            if (hit.collider.CompareTag("planet"))
+            if (hit.collider.CompareTag("Planet"))
             {
                 // Ray が接触した惑星のポリゴンの法線を Normalvec に代入する
                 normalVec = hit.normal;
