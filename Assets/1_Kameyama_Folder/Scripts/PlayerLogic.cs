@@ -64,10 +64,11 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other)//  他オブジェクトに触れた時の処理
+    //  他オブジェクトに触れた時の処理
+    void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Planet") ||
-            other.gameObject.CompareTag("Stage"))//  もし Planet というタグがついたオブジェクトに触れたら(地面に触れたら)
+        //  もし Planet というタグがついたオブジェクトに触れたら(地面に触れたら)
+        if (other.gameObject.CompareTag("Planet") || other.gameObject.CompareTag("Stage"))
         {
             grounded = true;// grounded を true にする(ジャンプを復活)
         }

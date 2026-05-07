@@ -756,7 +756,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459943286}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebd4613ca4ffb0c4c8c5afed66424a98, type: 3}
   m_Name: 
@@ -900,6 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gravity_Logic
   gravity: -100
+  normalGravity: -9.81
   planetJumpForce: 5
 --- !u!1 &1754653478
 GameObject:
