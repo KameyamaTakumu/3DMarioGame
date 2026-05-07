@@ -96,6 +96,9 @@ public class PlayerController3D : MonoBehaviour
         // --- ダッシュ入力 ---
         inputActions.Player.Dash.performed += ctx => dashPressed = true;
         inputActions.Player.Dash.canceled += ctx => dashPressed = false;
+
+        // --- ヒップドロップ入力 ---
+        inputActions.Player.GroundPound.performed += ctx => groundPoundPressed = true;
     }
 
     /// <summary>
@@ -143,6 +146,8 @@ public class PlayerController3D : MonoBehaviour
         // ヒップドロップ中は移動を無効化
         if (groundPounding || groundPoundStart)
         {
+            velocity.y += gravity * Time.deltaTime;
+
             controller.Move(new Vector3(0, velocity.y, 0) * Time.deltaTime);
             return;
         }
@@ -256,5 +261,7 @@ public class PlayerController3D : MonoBehaviour
                 Debug.Log("ヒップドロップ着地！");
             }
         }
+
+        groundPoundPressed = false;
     }
 }
