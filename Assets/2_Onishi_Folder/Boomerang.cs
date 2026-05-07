@@ -3,82 +3,112 @@ using System;
 
 public class Boomerang : MonoBehaviour
 {
-    [Header("速度")]
-    public float speed = 15f;
+    [Header("移動")]
+    public float forwardSpeed = 20f;
+    public float returnSpeed = 25f;
 
-    [Header("戻るまでの時間")]
-    public float returnTime = 1.5f;
+    [Header("滞空")]
+    public float maxDistance = 10f;
 
-    [Header("回転速度")]
-    public float rotateSpeed = 720f;
+    [Header("回転")]
+    public float rotateSpeed = 1000f;
+
+    [Header("カーブ")]
+    public float curveAmount = 2f;
 
     public Transform owner;
 
-    private bool isReturning = false;
-    private bool hitEnemy = false;
-
     public Action onReturn;
+
+    private Vector3 startPos;
+    private Vector3 forwardDir;
+
+    private bool returning;
+    private bool stuck;
 
     void Start()
     {
-        Invoke(nameof(StartReturn), returnTime);
+        startPos = transform.position;
+
+        // 投げた瞬間の方向を固定
+        forwardDir = transform.forward;
     }
 
     void Update()
     {
-        // 回転
-        transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
+        transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
 
-        // 敵に当たっていたら停止
-        if (hitEnemy) return;
+        if (stuck) return;
 
-        // 行き
-        if (!isReturning)
+        if (!returning)
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            ForwardMove();
+
+            float dist =
+                Vector3.Distance(startPos, transform.position);
+
+            if (dist >= maxDistance)
+            {
+                returning = true;
+            }
         }
-        // 戻り
         else
         {
-            if (owner == null) return;
-
-            Vector3 dir =
-                (owner.position - transform.position).normalized;
-
-            transform.position += dir * speed * Time.deltaTime;
-
-            // プレイヤーに戻った
-            if (Vector3.Distance(transform.position, owner.position) < 1f)
-            {
-                onReturn?.Invoke();
-                Destroy(gameObject);
-            }
+            ReturnMove();
         }
     }
 
-    void StartReturn()
+    void ForwardMove()
     {
-        if (!hitEnemy)
+        // 前進
+        Vector3 move = forwardDir * forwardSpeed;
+
+        // 横カーブ
+        move += transform.right *
+                Mathf.Sin(Time.time * 15f) *
+                curveAmount;
+
+        transform.position += move * Time.deltaTime;
+    }
+
+    void ReturnMove()
+    {
+        if (owner == null) return;
+
+        Vector3 target =
+            owner.position + Vector3.up * 1.5f;
+
+        Vector3 dir =
+            (target - transform.position).normalized;
+
+        transform.position +=
+            dir * returnSpeed * Time.deltaTime;
+
+        transform.rotation =
+            Quaternion.LookRotation(dir);
+
+        // プレイヤーへ戻る
+        if (Vector3.Distance(transform.position, target) < 1f)
         {
-            isReturning = true;
+            onReturn?.Invoke();
+
+            Destroy(gameObject);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (stuck) return;
+
         // 敵に当たった
         if (other.CompareTag("Enemy"))
         {
-            hitEnemy = true;
+            stuck = true;
 
-            // 地面に落とす
-            Rigidbody rb = GetComponent<Rigidbody>();
+            // 敵に刺さる
+            transform.SetParent(other.transform);
 
-            if (rb != null)
-            {
-                rb.isKinematic = false;
-                rb.useGravity = true;
-            }
+            Debug.Log("敵ヒット！");
         }
     }
 }
