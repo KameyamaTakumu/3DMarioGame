@@ -99,6 +99,7 @@ public class GoombaController : MonoBehaviour
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
     }
 
+    // マリオ担当がキャプチャー解除したときに呼ぶ想定
     public void OnReleased()
     {
         isCaptured = false;
