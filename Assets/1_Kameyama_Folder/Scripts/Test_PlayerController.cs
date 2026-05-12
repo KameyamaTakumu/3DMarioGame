@@ -11,6 +11,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class Test_PlayerController : MonoBehaviour
 {
+    // インスタンス
+    public static Test_PlayerController instance;
+
     //=====================================================
     // 移動設定
     //=====================================================
@@ -99,12 +102,22 @@ public class Test_PlayerController : MonoBehaviour
     private float pauseTimer;
     private float landingTimer;
 
+    // キャプチャ状態
+    // true; キャプチャ状態 false: キャプチャ解除
+    public bool captureTrigger = false;
+
     //=====================================================
     // 初期化
     //=====================================================
 
     void Awake()
     {
+        // インスタンス設定
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         // Rigidbody を取得
         rb = GetComponent<Rigidbody>();
 
@@ -192,6 +205,22 @@ public class Test_PlayerController : MonoBehaviour
 
         // ヒップドロップ
         GroundPound();
+
+        // キャプチャチェック
+        CaptureCheck();
+
+        // キャプチャ状態時
+        if(captureTrigger)
+        {
+            if (Keyboard.current.tKey.wasPressedThisFrame)
+            {
+                // キャプチャ状態を解除
+                captureTrigger = false;
+
+                // 操作をプレイヤーに戻す
+                PlaySwitch();
+            }
+        }
     }
 
     //=====================================================
@@ -453,6 +482,40 @@ public class Test_PlayerController : MonoBehaviour
             other.gameObject.CompareTag("Stage"))
         {
             grounded = false;
+        }
+    }
+
+    //=====================================================
+    // キャプチャ処理
+    //=====================================================
+
+    // キャプチャトリガーをチェックする関数
+    private void CaptureCheck()
+    {
+        if (!captureTrigger){ return; }
+        else 
+        {
+            // プレイヤーを操作できないようにする
+            PlaySwitch();
+        }
+    }
+
+    // プレイヤーを操作できないようにする関数
+    private void PlaySwitch()
+    {        
+        if (captureTrigger)
+        {
+            // inputActionを止める
+            OnDisable();
+
+            Debug.Log("プレイヤー操作不能");
+        }
+        else if (!captureTrigger) 
+        {
+            // inputActionを動かす
+            OnEnable();
+
+            Debug.Log("プレイヤー操作可能");
         }
     }
 }

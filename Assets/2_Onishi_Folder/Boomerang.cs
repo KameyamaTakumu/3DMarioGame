@@ -124,6 +124,9 @@ public class Boomerang : MonoBehaviour
                     // キャプチャを実行する
                     gc.OnCaptured();
 
+                    // Player にキャプチャを報告する
+                    Test_PlayerController.instance.captureTrigger = true;
+
                     // ブーメランを削除
                     Destroy(gameObject);
 
@@ -134,6 +137,10 @@ public class Boomerang : MonoBehaviour
             {
                 Debug.Log("コントローラーが見つかりませんでした");
             }
+
+            // ブーメランを戻す(再度投げられるようにする)
+            returning = true;
+            onReturn?.Invoke();
         }
     }
 }
