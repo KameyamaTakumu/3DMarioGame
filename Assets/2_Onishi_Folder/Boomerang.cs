@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class Boomerang : MonoBehaviour
 {
@@ -109,6 +110,30 @@ public class Boomerang : MonoBehaviour
             transform.SetParent(other.transform);
 
             Debug.Log("敵ヒット！");
+
+            // 敵にControllerが付いているかを確認する
+            if (other.GetComponent<GoombaController>() != null)
+            {
+                // Controllerコンポーネントを取得する
+                GoombaController gc = other.GetComponent<GoombaController>();
+
+                Debug.Log("コントローラー取得");
+
+                if (gc != null)
+                {
+                    // キャプチャを実行する
+                    gc.OnCaptured();
+
+                    // ブーメランを削除
+                    Destroy(gameObject);
+
+                    Debug.Log("キャプチャしました");
+                }
+            }
+            else
+            {
+                Debug.Log("コントローラーが見つかりませんでした");
+            }
         }
     }
 }

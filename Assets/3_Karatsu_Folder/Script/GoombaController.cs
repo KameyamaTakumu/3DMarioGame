@@ -105,4 +105,7 @@ public class GoombaController : MonoBehaviour
         isCaptured = false;
         moveInput = Vector2.zero;
     }
+
+    // isCaptured ‚ÌŒ»İ‚Ìó‹µ‚ğŠm”F‚·‚é‚±‚Æ‚ª‚Å‚«‚é“Ç‚İæ‚èŠÖ”
+    public bool IsCaptured() => isCaptured;
 }

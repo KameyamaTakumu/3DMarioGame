@@ -3,23 +3,17 @@ using UnityEngine;
 // プレイヤーが惑星の表面に引き寄せられるような重力と、惑星の表面に沿って回転するような処理を行うクラス
 public class GravityLogic : MonoBehaviour
 {
-    // ===== 参照 =====
-
     // Player の Transform
     private Transform myTransform;
 
     // Player の Rigidbody
     private Rigidbody rb = null;
 
-    // ===== 惑星関連 =====
-
     // 重力源となる惑星
     private GameObject currentPlanet;
 
     // Planet タグがついているオブジェクトを格納する配列
     private GameObject[] planets;
-
-    // ===== 重力設定 =====
 
     [Header("惑星重力")]
     public float gravity = -30f;
