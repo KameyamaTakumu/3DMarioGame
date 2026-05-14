@@ -40,12 +40,6 @@ public class CameraController : MonoBehaviour
     void OnEnable() => inputActions.Enable();
     void OnDisable() => inputActions.Disable();
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     void LateUpdate()
     {
         RotateCamera();
@@ -61,20 +55,39 @@ public class CameraController : MonoBehaviour
 
     void FollowTarget()
     {
-        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+        // プレイヤーの後ろ方向
+        Vector3 backward = -target.forward;
 
-        Vector3 targetPosition = target.position;
-        Vector3 desiredPosition = targetPosition - rotation * Vector3.forward * distance;
+        // プレイヤーの少し上から見る
+        Vector3 offset =
+            backward * distance +
+            target.up * 2f;
 
-        // 壁判定
+        Vector3 desiredPosition =
+            target.position + offset;
+
+        // 障害物判定
         RaycastHit hit;
-        if (Physics.Linecast(targetPosition, desiredPosition, out hit, obstacleMask))
+        if (Physics.Linecast(
+            target.position,
+            desiredPosition,
+            out hit,
+            obstacleMask))
         {
             desiredPosition = hit.point;
         }
 
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.LookAt(targetPosition);
+        // なめらかに追従
+        transform.position = Vector3.Lerp(
+            transform.position,
+            desiredPosition,
+            smoothSpeed * Time.deltaTime
+        );
+
+        // プレイヤーを見る
+        transform.LookAt(
+            target.position + target.up * 1.5f
+        );
     }
 
     public void SetTarget(Transform newTarget)

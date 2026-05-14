@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/1_Kameyama_Folder/Kameyama_Scene_Map00.unity
+    guid: fae21deaed455fa449770b6fa6d1d672
+  - enabled: 1
+    path: Assets/1_Kameyama_Folder/Kameyama_Scene_Map01.unity
+    guid: 7841c135d5e22a44f89ca6d48265e9c4
+  - enabled: 1
+    path: Assets/1_Kameyama_Folder/Kameyama_Scene_Map02.unity
+    guid: ef18152743a0d064fa82d92ee0d569ea
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

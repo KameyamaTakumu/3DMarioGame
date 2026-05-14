@@ -74,21 +74,57 @@ public class GoombaController : MonoBehaviour
     {
         if (moveInput.sqrMagnitude < 0.01f)
         {
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            rb.linearVelocity =
+                new Vector3(0, rb.linearVelocity.y, 0);
             return;
         }
 
-        // 移動：現在の重力を維持しつつX,Z軸を動かす
-        Vector3 targetVelocity = new Vector3(moveInput.x * moveSpeed, rb.linearVelocity.y, moveInput.y * moveSpeed);
+        //==============================
+        // カメラ基準方向
+        //==============================
+
+        Transform cam = Camera.main.transform;
+
+        Vector3 camForward = cam.forward;
+        Vector3 camRight = cam.right;
+
+        // 上下方向を除去
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // 入力方向
+        Vector3 moveDirection =
+            camForward * moveInput.y +
+            camRight * moveInput.x;
+
+        moveDirection.Normalize();
+
+        //==============================
+        // 移動
+        //==============================
+
+        Vector3 targetVelocity =
+            moveDirection * moveSpeed;
+
+        targetVelocity.y = rb.linearVelocity.y;
+
         rb.linearVelocity = targetVelocity;
 
-        // 回転：入力があるときだけ、進行方向を向く
-        if (moveInput.sqrMagnitude > 0.01f)
-        {
-            Vector3 lookDirection = new Vector3(moveInput.x, 0, moveInput.y);
-            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-        }
+        //==============================
+        // 回転
+        //==============================
+
+        Quaternion targetRotation =
+            Quaternion.LookRotation(moveDirection);
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.fixedDeltaTime
+        );
     }
 
     // --- 本実装で使う用のメソッド（マリオ担当が呼ぶ想定） ---

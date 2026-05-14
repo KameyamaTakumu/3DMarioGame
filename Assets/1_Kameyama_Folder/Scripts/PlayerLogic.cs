@@ -39,16 +39,53 @@ public class PlayerLogic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // プレイヤーの回転の処理
-        HorizontalRotate();
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        // プレイヤーの進行方向を取得
-        Vector3 moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        Transform cam = Camera.main.transform;
 
-        // プレイヤーの進行方向に速さをかけて、プレイヤーの位置を更新する
-        // Time.deltaTime を掛けることでフレームレートに依存しなくスムーズに動く
-        // transform.TransformDirection はローカルな座標をワールドな座標に変換する関数
-        rb.MovePosition(rb.position + transform.TransformDirection(moveDirection) * moveSpeed * Time.deltaTime);
+        // 惑星表面に沿った方向へ補正
+        Vector3 camForward =
+            Vector3.ProjectOnPlane(
+                cam.forward,
+                transform.up
+            ).normalized;
+
+        Vector3 camRight =
+            Vector3.ProjectOnPlane(
+                cam.right,
+                transform.up
+            ).normalized;
+
+        Vector3 moveDirection =
+            camForward * v +
+            camRight * h;
+
+        moveDirection.Normalize();
+
+        // 回転
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation =
+                Quaternion.LookRotation(
+                    moveDirection,
+                    transform.up
+                );
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotateSpeed * Time.deltaTime
+            );
+        }
+
+        // 移動
+        rb.MovePosition(
+            rb.position +
+            moveDirection *
+            moveSpeed *
+            Time.deltaTime
+        );
     }
 
     void Jump()
@@ -72,31 +109,5 @@ public class PlayerLogic : MonoBehaviour
         {
             grounded = true;// grounded を true にする(ジャンプを復活)
         }
-    }
-
-    // プレイヤーの回転の処理
-    void HorizontalRotate()
-    {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            // プレイヤーから見て反時計回りに回転させる
-            rotateDirection = -1;
-        }
-        else if (Input.GetKey(KeyCode.E))
-        {
-            // プレイヤーから見て時計回りに回転させる
-            rotateDirection = 1;
-        }
-        else
-        {
-            rotateDirection = 0;
-        }
-
-        // オブジェクトからみて垂直方向を軸として回転させる Quaternion を作成
-        Quaternion rt = Quaternion.AngleAxis(rotateDirection * rotateSpeed, transform.up);
-        // 現在の自信の回転の情報を取得する
-        Quaternion q = this.transform.rotation;
-        // 合成して自身に設定
-        this.transform.rotation = rt * q;
     }
 }

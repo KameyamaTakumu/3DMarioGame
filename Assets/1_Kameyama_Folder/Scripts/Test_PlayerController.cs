@@ -267,6 +267,19 @@ public class Test_PlayerController : MonoBehaviour
         Vector3 worldMove =
             transform.TransformDirection(moveDirection);
 
+        // プレイヤー移動方向へ回転
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation =
+                Quaternion.LookRotation(worldMove, transform.up);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotateSpeed * Time.fixedDeltaTime
+            );
+        }
+
         // 移動速度
         float currentSpeed =
             dashPressed ? dashSpeed : moveSpeed;
