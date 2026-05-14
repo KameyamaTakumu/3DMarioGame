@@ -1,6 +1,7 @@
 using UnityEngine;
 
 // オブジェクトが左右に移動するクラス
+[RequireComponent(typeof(Rigidbody))]
 public class MovingFloor : MonoBehaviour
 {
     // オブジェクトの移動する速さ
