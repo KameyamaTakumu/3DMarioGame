@@ -33,8 +33,22 @@ public class CannonBullet : MonoBehaviour
         rb.angularVelocity = Vector3.zero; // 回転も止める
         rb.isKinematic = true;            // 物理演算の影響をオフにする
 
-        Debug.Log("着弾：ここでマリオを出現させる座標：" + transform.position);
-        // ※マリオ担当の人へ：この座標 transform.position にマリオを移動させて復活させてね
+        // CaptureManager取得
+        CaptureManager capture =
+            FindObjectOfType<CaptureManager>();
+
+        if (capture != null)
+        {
+            // 少し上に出すと地面埋まり防止になる
+            Vector3 spawnPos =
+                transform.position + Vector3.up * 1.0f;
+
+            // プレイヤー復活
+            capture.RespawnPlayer(spawnPos);
+        }
+
+        //Debug.Log("着弾：ここでマリオを出現させる座標：" + transform.position);
+        //// ※マリオ担当の人へ：この座標 transform.position にマリオを移動させて復活させてね
 
         Destroy(gameObject, 0.1f); // 役目を終えたら消える
     }

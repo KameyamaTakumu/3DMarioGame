@@ -13,13 +13,18 @@ public class CannonController : MonoBehaviour
     [SerializeField] private Transform shootPoint; // 弾を発射する位置
     [SerializeField] private float shootForce = 40f; // 発射する力
 
+    [Header("カメラ設定")]
+    [CustomLabel("カメラ参照"), SerializeField] 
+    private CameraController _cameraController;
+    [CustomLabel("カメラポイント"),SerializeField]
+    private Transform cameraPoint;
+
     [Header("キャプチャーテスト")]
     [SerializeField] private bool isCaptured = false; // キャプチャー中かどうか
 
     private Vector2 lookInput;      // プレイヤーの入力を格納する変数
     private float hRotation = 0f;   // 水平方向の回転角度
     private float vRotation = 0f;   // 垂直方向の回転角度
-
 
     void Update()
     {
@@ -78,9 +83,26 @@ public class CannonController : MonoBehaviour
             rb.AddForce(shootPoint.forward * shootForce, ForceMode.Impulse);
         }
 
+        // 発射したら前面カメラをオフにする
+        _cameraController.SetFrontView(false);
+
+        // カメラを弾へ追従
+        if (_cameraController != null)
+        {
+            _cameraController.SetTarget(
+                bullet.transform
+            );
+        }
+
         // 発射したら自分自身のキャプチャーは解除
         OnReleased();
         Debug.Log("大砲発射：キャプチャー解除");
+
+        // 発射後初期位置に戻す
+        transform.localRotation = Quaternion.Euler(0,0,0);
+
+        // 回転量を初期化
+        initRotation();
 
         // ※マリオ担当の人へ：ここでマリオのモデルを非表示にする等の処理を呼んでもらう
     }
@@ -89,6 +111,16 @@ public class CannonController : MonoBehaviour
     {
         isCaptured = true;
         lookInput = Vector2.zero;
+
+        if (_cameraController != null)
+        {
+            _cameraController.SetTarget(
+                transform,
+                cameraPoint,
+                true
+            );
+        }
+
         Debug.Log("大砲キャプチャー：InputActionで操作可能");
     }
 
@@ -96,5 +128,14 @@ public class CannonController : MonoBehaviour
     {
         isCaptured = false;
         lookInput = Vector2.zero;
+    }
+
+    // 大砲の回転量を初期化
+    private void initRotation()
+    {
+        hRotation = 0f;
+        vRotation = 0f;
+
+        transform.rotation = Quaternion.Euler(0,0,0);
     }
 }

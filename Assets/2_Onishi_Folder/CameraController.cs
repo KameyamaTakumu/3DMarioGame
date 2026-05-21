@@ -25,6 +25,10 @@ public class CameraController : MonoBehaviour
     private float yaw;
     private float pitch;
 
+    private bool cannonView = false;
+
+    private Transform customCameraPoint;
+
     private Vector2 lookInput;
 
     private PlayerInputActions inputActions;
@@ -56,15 +60,27 @@ public class CameraController : MonoBehaviour
     void FollowTarget()
     {
         // プレイヤーの後ろ方向
-        Vector3 backward = -target.forward;
+        Vector3 desiredPosition;
 
-        // プレイヤーの少し上から見る
-        Vector3 offset =
-            backward * distance +
-            target.up * 2f;
+        if (customCameraPoint != null)
+        {
+            // 指定位置を使う
+            desiredPosition =
+                customCameraPoint.position;
+        }
+        else
+        {
+            // 通常カメラ
+            Vector3 backward = -target.forward;
 
-        Vector3 desiredPosition =
-            target.position + offset;
+            // プレイヤーの少し上から見る
+            Vector3 offset =
+                backward * distance +
+                target.up * 2f;
+
+            desiredPosition =
+                target.position + offset;
+        }
 
         // 障害物判定
         RaycastHit hit;
@@ -84,14 +100,32 @@ public class CameraController : MonoBehaviour
             smoothSpeed * Time.deltaTime
         );
 
-        // プレイヤーを見る
-        transform.LookAt(
-            target.position + target.up * 1.5f
-        );
+        if (cannonView)
+        {
+            // 大砲から見る
+            transform.rotation = target.rotation;
+        }
+        else
+        {
+            // プレイヤーを見る
+            transform.LookAt(
+                target.position + target.up * 1.5f
+            );
+        }
     }
 
-    public void SetTarget(Transform newTarget)
+    public void SetTarget(
+    Transform newTarget,
+    Transform cameraPoint = null,
+    bool isCannonView = false)
     {
         target = newTarget;
+        customCameraPoint = cameraPoint;
+        cannonView = isCannonView;
+    }
+
+    public void SetFrontView(bool value)
+    {
+        bool frontView = value;
     }
 }
