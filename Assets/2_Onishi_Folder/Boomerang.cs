@@ -102,39 +102,6 @@ public class Boomerang : MonoBehaviour
         if (stuck) return;
 
         // 敵に当たった
-        //if (other.CompareTag("Enemy"))
-        //{
-        //    stuck = true;
-
-        //    transform.SetParent(other.transform);
-
-        //    // キャプチャーマネージャ取得
-        //    CaptureManager capture =
-        //        FindObjectOfType<CaptureManager>();
-
-        //    GoombaController gc = other.GetComponent<GoombaController>();
-
-        //    if (capture != null)
-        //    {
-        //        capture.Capture(other.transform);
-        //    }
-
-        //    if (gc != null)
-        //    {
-        //        // キャプチャを実行する
-        //        gc.OnCaptured();
-
-        //        // Player にキャプチャを報告する
-        //        Test_PlayerController.instance.captureTrigger = true;
-
-        //        // ブーメランを削除
-        //        Destroy(gameObject);
-
-        //        Debug.Log("キャプチャしました");
-        //    }
-
-        //    Debug.Log("キャプチャー成功！");
-        //}
         if (other.CompareTag("Enemy"))
         {
             stuck = true;
@@ -166,6 +133,27 @@ public class Boomerang : MonoBehaviour
                 {
                     // キャプチャを実行する
                     gc.OnCaptured();
+
+                    // Player にキャプチャを報告する
+                    PlayerController.instance.captureTrigger = true;
+
+                    // ブーメランを削除
+                    Destroy(gameObject);
+
+                    Debug.Log("キャプチャしました");
+                }
+            }
+            else if (other.GetComponent<CannonController>() != null)
+            {
+                // Controllerコンポーネントを取得する
+                CannonController cc = other.GetComponent<CannonController>();
+
+                Debug.Log("コントローラー取得");
+
+                if (cc != null)
+                {
+                    // キャプチャを実行する
+                    cc.OnCaptured();
 
                     // Player にキャプチャを報告する
                     PlayerController.instance.captureTrigger = true;

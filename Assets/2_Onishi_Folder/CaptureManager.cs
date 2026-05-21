@@ -56,4 +56,24 @@ public class CaptureManager : MonoBehaviour
 
         Debug.Log("キャプチャー解除");
     }
+
+    // プレイヤーを指定座標へ復活させる
+    public void RespawnPlayer(Vector3 position)
+    {
+        captured = false;
+
+        // プレイヤー移動
+        player.transform.position = position;
+
+        // Player再表示
+        player.SetActive(true);
+
+        // カメラ戻す
+        cameraController.SetTarget(player.transform);
+
+        // プレイヤー操作復帰
+        PlayerController.instance.captureTrigger = false;
+
+        Debug.Log("プレイヤー復活");
+    }
 }
