@@ -201,59 +201,33 @@ public class GravityLogic : MonoBehaviour
     }
 
     // =========================================
-    // d—ÍØ‚è‘Ö‚¦
+    // ˜f¯Ø‚è‘Ö‚¦
     // =========================================
-    public void ReverseGravity()
+    public void SetPlanet(GameObject nextPlanet)
     {
-        Debug.Log("gravity Reversed!");
+        Debug.Log("gravity Switched!");
 
-        GameObject nextPlanet = ChooseSecondPlanet();
-
-        if (nextPlanet != null)
+        // ˜f¯‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢‚È‚çI—¹
+        if (nextPlanet == null)
         {
-            currentPlanet = nextPlanet;
-
-            Vector3 jumpDir =
-                (currentPlanet.transform.position - transform.position).normalized;
-
-            rb.AddForce(jumpDir * planetJumpForce, ForceMode.Impulse);
-        }
-    }
-
-    // =========================================
-    // “ñ”Ô–Ú‚É‹ß‚¢˜f¯æ“¾
-    // =========================================
-    GameObject ChooseSecondPlanet()
-    {
-        planets = GameObject.FindGameObjectsWithTag("Planet");
-
-        GameObject nearest = null;
-        GameObject second = null;
-
-        float minDist = Mathf.Infinity;
-        float secondDist = Mathf.Infinity;
-
-        foreach (GameObject p in planets)
-        {
-            float dist =
-                Vector3.Distance(transform.position, p.transform.position);
-
-            if (dist < minDist)
-            {
-                secondDist = minDist;
-                second = nearest;
-
-                minDist = dist;
-                nearest = p;
-            }
-            else if (dist < secondDist)
-            {
-                secondDist = dist;
-                second = p;
-            }
+            return;
         }
 
-        return second;
+        // Ÿ‚Ì˜f¯‚Ö•ÏX
+        currentPlanet = nextPlanet;
+
+        // ”ò‚Ô•ûŒü
+        Vector3 jumpDir =
+            (currentPlanet.transform.position - transform.position).normalized;
+
+        // ˆê’U‘¬“x‚ğƒŠƒZƒbƒg
+        rb.linearVelocity = Vector3.zero;
+
+        // ˜f¯‚ÖŒü‚©‚Á‚Ä”ò‚Î‚·
+        rb.AddForce(jumpDir * planetJumpForce, ForceMode.Impulse);
+
+        // ˜f¯d—Íƒ‚[ƒh‚Ö
+        isPlanetGravity = true;
     }
 
     // Œ»İ˜f¯d—Í‚©‚Ç‚¤‚©æ“¾

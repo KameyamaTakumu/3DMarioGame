@@ -14,8 +14,8 @@ public class CaptureManager : MonoBehaviour
 
     void Update()
     {
-        // T‚Å‰ğœ
-        if (captured && Keyboard.current.tKey.wasPressedThisFrame)
+        // R‚Å‰ğœ
+        if (captured && Keyboard.current.rKey.wasPressedThisFrame)
         {
             ReleaseCapture();
         }
