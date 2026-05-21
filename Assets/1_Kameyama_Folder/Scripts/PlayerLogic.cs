@@ -11,11 +11,6 @@ public class PlayerLogic : MonoBehaviour
     // プレイヤーの回転する速さ
     public float rotateSpeed = 5;
 
-    // プレイヤーの回転する向き
-    //  1(プレイヤーから見て)  時計回り
-    // -1(プレイヤーから見て)反時計回り
-    private int rotateDirection = 0;
-
     // プレイヤーの Rigidbody
     private Rigidbody rb = null;
 

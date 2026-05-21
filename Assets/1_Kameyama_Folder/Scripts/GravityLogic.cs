@@ -253,8 +253,6 @@ public class GravityLogic : MonoBehaviour
             }
         }
 
-        Debug.Log(second.gameObject.name);
-
         return second;
     }
 
