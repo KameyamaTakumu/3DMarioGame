@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3961702658115368593}
   - component: {fileID: 4132050553266765848}
   - component: {fileID: -780829829417443091}
+  - component: {fileID: -4504287724851709111}
   - component: {fileID: 3365711120925245792}
   - component: {fileID: 6612134501861028715}
   m_Layer: 0
@@ -167,6 +168,19 @@ MonoBehaviour:
   landingLag: 0.2
   grounded: 0
   captureTrigger: 0
+--- !u!114 &-4504287724851709111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7287939904889274781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2676e26d91b108948bfcca7f73f5d5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
+  deathY: -50
 --- !u!114 &3365711120925245792
 MonoBehaviour:
   m_ObjectHideFlags: 0

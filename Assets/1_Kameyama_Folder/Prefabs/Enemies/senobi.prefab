@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 6026024574887159843}
   - component: {fileID: 7056610857430671169}
   - component: {fileID: 8389745946081336928}
+  - component: {fileID: 2815797651757434056}
   m_Layer: 0
   m_Name: senobi
   m_TagString: Enemy
@@ -363,6 +364,19 @@ MonoBehaviour:
   groundCheckDistance: 0.6
   bodyMesh: {fileID: 5762104178564496976}
   headPart: {fileID: 1551138576091335846}
+--- !u!114 &2815797651757434056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7030086902373030193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2676e26d91b108948bfcca7f73f5d5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
+  deathY: -50
 --- !u!1 &7655242255155767212
 GameObject:
   m_ObjectHideFlags: 0

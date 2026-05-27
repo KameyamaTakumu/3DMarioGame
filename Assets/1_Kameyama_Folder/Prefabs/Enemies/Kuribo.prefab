@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4212275314717957949}
   - component: {fileID: 6513368450296678686}
   - component: {fileID: 2118903611721944273}
+  - component: {fileID: -1263189297630386823}
   m_Layer: 0
   m_Name: Kuribo
   m_TagString: Enemy
@@ -201,3 +202,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoombaAI
   walkRange: 3
   speed: 1.5
+--- !u!114 &-1263189297630386823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2956143997180789913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2676e26d91b108948bfcca7f73f5d5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
+  deathY: -50
