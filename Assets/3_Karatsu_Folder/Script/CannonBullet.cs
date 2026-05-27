@@ -19,7 +19,7 @@ public class CannonBullet : MonoBehaviour
 
         // ステージ（壁や床）に当たったら
         // ※Tagを"Stage"などに設定しておいてください
-        if (collision.gameObject.CompareTag("Stage"))
+        if (collision.gameObject.CompareTag("Stage") || collision.gameObject.CompareTag("Wall"))
         {
             hasHit = true; // 衝突フラグを立てる
             StopAndReturn();
