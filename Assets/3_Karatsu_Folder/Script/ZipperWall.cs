@@ -21,10 +21,10 @@ public class ZipperWall : MonoBehaviour
     void Update()
     {
         // テスト用：スペースキーを押したらチャックが動いたことにする
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            OpenZipperWall();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    OpenZipperWall();
+        //}
     }
 
 

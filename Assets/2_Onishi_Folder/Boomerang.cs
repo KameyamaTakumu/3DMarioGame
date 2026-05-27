@@ -185,6 +185,27 @@ public class Boomerang : MonoBehaviour
                     Debug.Log("キャプチャしました");
                 }
             }
+            else if (other.GetComponent<ZipperSlider>() != null)
+            {
+                // Controllerコンポーネントを取得する
+                ZipperSlider zs = other.GetComponent<ZipperSlider>();
+
+                Debug.Log("コントローラー取得");
+
+                if (zs != null)
+                {
+                    // キャプチャを実行する
+                    zs.OnCaptured();
+
+                    // Player にキャプチャを報告する
+                    PlayerController.instance.captureTrigger = true;
+
+                    // ブーメランを削除
+                    Destroy(gameObject);
+
+                    Debug.Log("キャプチャしました");
+                }
+            }
             else
             {
                 Debug.Log("コントローラーが見つかりませんでした");

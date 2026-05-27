@@ -10,6 +10,10 @@ public class CameraController : MonoBehaviour
     public float distance = 5f;
     public float minDistance = 2f;
     public float maxDistance = 6f;
+    [CustomLabel("カメラの高さ"), SerializeField]
+    private float cameraHeight = 2f;
+    [CustomLabel("カメラの角度"), SerializeField]
+    private float cameraRotation = 2f;
 
     [Header("回転")]
     public float mouseSensitivity = 2f;
@@ -22,23 +26,15 @@ public class CameraController : MonoBehaviour
     [Header("衝突")]
     public LayerMask obstacleMask;
 
-    private float yaw;
-    private float pitch;
-
     private bool cannonView = false;
 
     private Transform customCameraPoint;
-
-    private Vector2 lookInput;
 
     private PlayerInputActions inputActions;
 
     void Awake()
     {
         inputActions = new PlayerInputActions();
-
-        inputActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-        inputActions.Player.Look.canceled += ctx => lookInput = Vector2.zero;
     }
 
     void OnEnable() => inputActions.Enable();
@@ -46,19 +42,17 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        RotateCamera();
         FollowTarget();
-    }
-
-    void RotateCamera()
-    {
-        yaw += lookInput.x * mouseSensitivity;
-        pitch -= lookInput.y * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, minY, maxY);
     }
 
     void FollowTarget()
     {
+        // target が消えていたら処理しない
+        if (target == null)
+        {
+            return;
+        }
+
         // プレイヤーの後ろ方向
         Vector3 desiredPosition;
 
@@ -76,7 +70,7 @@ public class CameraController : MonoBehaviour
             // プレイヤーの少し上から見る
             Vector3 offset =
                 backward * distance +
-                target.up * 2f;
+                target.up * cameraHeight;
 
             desiredPosition =
                 target.position + offset;
@@ -109,7 +103,7 @@ public class CameraController : MonoBehaviour
         {
             // プレイヤーを見る
             transform.LookAt(
-                target.position + target.up * 1.5f
+                target.position + target.up * cameraRotation
             );
         }
     }

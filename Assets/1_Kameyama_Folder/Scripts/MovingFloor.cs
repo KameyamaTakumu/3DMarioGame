@@ -35,4 +35,22 @@ public class MovingFloor : MonoBehaviour
         // Rigidbody を使用してオブジェクトの位置を更新する
         rb.MovePosition(new Vector3(posX, startPos.y, startPos.z)); 
     }
+
+    // プレイヤーが乗ったら親子付け
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.transform.SetParent(transform);
+        }
+    }
+
+    // 降りたら親子解除
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.transform.SetParent(null);
+        }
+    }
 }

@@ -42,9 +42,13 @@ public class CaptureManager : MonoBehaviour
     {
         captured = false;
 
+        // 敵の後ろ方向
+        Vector3 backOffset = -currentEnemy.transform.forward * 2f;
+
         // プレイヤーを敵位置へ移動
         player.transform.position =
-            currentEnemy.transform.position;
+            currentEnemy.transform.position
+            + backOffset;
 
         // Player再表示
         player.SetActive(true);
