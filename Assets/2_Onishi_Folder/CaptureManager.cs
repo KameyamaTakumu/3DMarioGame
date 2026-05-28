@@ -69,6 +69,8 @@ public class CaptureManager : MonoBehaviour
         // プレイヤー移動
         player.transform.position = position;
 
+        player.transform.rotation = Quaternion.identity;
+
         // Player再表示
         player.SetActive(true);
 

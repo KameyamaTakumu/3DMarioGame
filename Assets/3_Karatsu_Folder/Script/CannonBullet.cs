@@ -43,6 +43,9 @@ public class CannonBullet : MonoBehaviour
             Vector3 spawnPos =
                 transform.position + Vector3.up * 1.0f;
 
+            // 上に出して、少し後ろに下げる
+            spawnPos += -transform.forward * 1f;
+
             // プレイヤー復活
             capture.RespawnPlayer(spawnPos);
         }
