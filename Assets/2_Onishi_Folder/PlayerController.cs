@@ -350,6 +350,8 @@ public class PlayerController : MonoBehaviour
         {
             grounded = false;
 
+            SoundManager.Instance.PlaySE(SE.Jump_M);
+
             Vector3 velocity = rb.linearVelocity;
             velocity.y = 0;
             rb.linearVelocity = velocity;
@@ -370,7 +372,6 @@ public class PlayerController : MonoBehaviour
                 ForceMode.Impulse
             );
 
-            // ここ！！
             jumpCombo++;
 
             if (jumpCombo > 2)
@@ -573,6 +574,8 @@ public class PlayerController : MonoBehaviour
     // プレイヤーを操作できないようにする関数
     private void PlaySwitch()
     {
+        SoundManager.Instance.PlaySE(SE.Capture);
+
         if (captureTrigger)
         {
             // inputActionを止める
