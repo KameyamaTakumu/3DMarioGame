@@ -8,7 +8,7 @@ using System.Reflection;
 
 [CustomEditor(typeof(Readme))]
 [InitializeOnLoad]
-public class ReadmeEditor : Editor
+public class ReadmeEditor : SoundManagerEditor
 {
     static string s_ShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
     
