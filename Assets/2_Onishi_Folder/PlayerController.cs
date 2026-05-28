@@ -55,6 +55,16 @@ public class PlayerController : MonoBehaviour
     // 現在のコヨーテタイマー
     private float coyoteTimer;
 
+    [Header("三段ジャンプ")]
+
+    public float secondJumpMultiplier = 1.2f;
+    public float thirdJumpMultiplier = 1.6f;
+
+    public float comboResetTime = 1f;
+
+    private int jumpCombo = 0;
+    private float comboTimer;
+
     //=====================================================
     // ヒップドロップ設定
     //=====================================================
@@ -105,6 +115,10 @@ public class PlayerController : MonoBehaviour
     // キャプチャ状態
     // true; キャプチャ状態 false: キャプチャ解除
     public bool captureTrigger = false;
+
+    private Animator animator;
+
+
 
     //=====================================================
     // 初期化
@@ -172,6 +186,8 @@ public class PlayerController : MonoBehaviour
         {
             groundPoundPressed = true;
         };
+
+        animator = GetComponent<Animator>();
     }
 
     void OnEnable()
@@ -184,12 +200,19 @@ public class PlayerController : MonoBehaviour
         inputActions.Disable();
     }
 
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     //=====================================================
     // 毎フレーム更新
     //=====================================================
 
     void Update()
     {
+        ComboUpdate();
+
         // コヨーテタイム更新
         if (grounded)
         {
@@ -221,6 +244,10 @@ public class PlayerController : MonoBehaviour
                 PlaySwitch();
             }
         }
+
+        UpdateAnimation();
+
+        Debug.Log(grounded);
     }
 
     //=====================================================
@@ -323,22 +350,52 @@ public class PlayerController : MonoBehaviour
         {
             grounded = false;
 
-            // 現在のY速度をリセット
             Vector3 velocity = rb.linearVelocity;
             velocity.y = 0;
             rb.linearVelocity = velocity;
 
-            // transform.up 方向へジャンプ
+            float currentJumpPower = jumpPower;
+
+            if (jumpCombo == 1)
+            {
+                currentJumpPower *= secondJumpMultiplier;
+            }
+            else if (jumpCombo >= 2)
+            {
+                currentJumpPower *= thirdJumpMultiplier;
+            }
+
             rb.AddForce(
-                transform.up * jumpPower,
+                transform.up * currentJumpPower,
                 ForceMode.Impulse
             );
+
+            // ここ！！
+            jumpCombo++;
+
+            if (jumpCombo > 2)
+            {
+                jumpCombo = 0;
+            }
+
+            comboTimer = comboResetTime;
 
             jumpPressed = false;
             coyoteTimer = 0;
         }
+    }
 
-        jumpPressed = false;
+    void ComboUpdate()
+    {
+        if (jumpCombo > 0)
+        {
+            comboTimer -= Time.deltaTime;
+
+            if (comboTimer <= 0)
+            {
+                jumpCombo = 0;
+            }
+        }
     }
 
     //=====================================================
@@ -530,5 +587,42 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("プレイヤー操作可能");
         }
+    }
+
+    //=====================================================
+    // アニメーション更新
+    //=====================================================
+
+    void UpdateAnimation()
+    {
+        // 上方向速度
+        Vector3 verticalVelocity =
+            Vector3.Project(
+                rb.linearVelocity,
+                transform.up
+            );
+
+        // 水平速度
+        Vector3 horizontalVelocity =
+            rb.linearVelocity - verticalVelocity;
+
+        // 現在速度
+        float currentSpeed =
+            horizontalVelocity.magnitude;
+
+        // 正規化
+        float animationSpeed =
+            currentSpeed / dashSpeed;
+
+        // Animatorへ渡す
+        animator.SetFloat(
+            "Speed",
+            animationSpeed
+        );
+
+        animator.SetBool(
+            "Grounded",
+            grounded
+        );
     }
 }
