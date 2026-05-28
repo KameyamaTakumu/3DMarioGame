@@ -7957,12 +7957,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   target: {fileID: 690462538}
   distance: 8
-  minDistance: 8
+  minDistance: 1
   maxDistance: 8
-  mouseSensitivity: 0.1
-  minY: -30
-  maxY: 60
-  smoothSpeed: 10
+  cameraHeight: 2
+  lookAtHeightOffset: 1
+  positionSmoothSpeed: 4
+  rotationSmoothSpeed: 8
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
@@ -10286,6 +10286,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -780829829417443091, guid: 71a12632e83db1b47ba316a493237820, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4132050553266765848, guid: 71a12632e83db1b47ba316a493237820, type: 3}
       propertyPath: m_Interpolate
       value: 1
