@@ -51,6 +51,7 @@ public class CannonController : MonoBehaviour
         // ‰Ÿ‚³‚ê‚½uŠÔ‚Ì‚İÀs
         if (isCaptured && value.isPressed)
         {
+            SoundManager.Instance.PlaySE(SE.Cannon); // ”­Ë‰¹‚ğÄ¶
             Shoot();
         }
     }
@@ -128,6 +129,7 @@ public class CannonController : MonoBehaviour
     {
         isCaptured = false;
         lookInput = Vector2.zero;
+        SoundManager.Instance.PlaySE(SE.Landing); // ’…’n‰¹‚ğÄ¶
     }
 
     // ‘å–C‚Ì‰ñ“]—Ê‚ğ‰Šú‰»

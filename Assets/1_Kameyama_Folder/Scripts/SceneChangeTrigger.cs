@@ -12,6 +12,8 @@ public class SceneChangeTrigger : MonoBehaviour
         // 衝突したオブジェクトが Player タグを持っているかどうかを確認する
         if (other.CompareTag("Player"))
         {
+            SoundManager.Instance.PlaySE(SE.Dokan);
+
             SceneManager.LoadScene(sceneName);
 
             Debug.Log("シーン遷移しました");

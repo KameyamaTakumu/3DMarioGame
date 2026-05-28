@@ -17,12 +17,25 @@ using System.Collections;
 public enum BGM
 {
     Test_BGM,
+    Title,
+    Select,
+    Stage1,
+    Stage2,
 }
 
 // SE‚Ìenum‚ð‚±‚±‚É’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢
 public enum SE
 {
     Test_SE,
+    Button,
+    Cannon,
+    Landing,
+    Capture,
+    Dokan,
+    Senobi,
+    Jump_W,
+    Jump_M,
+    hat,
 }
 public class SoundManager : MonoBehaviour
 {

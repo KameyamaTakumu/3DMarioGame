@@ -68,6 +68,8 @@ public class UprootController : MonoBehaviour
         // --- —£‚µ‚½uŠÔ”»’è ---
         bool wasStretching = isStretching;
 
+        SoundManager.Instance.PlaySE(SE.Senobi); // L‚Ñ‚é‰¹‚ğÄ¶
+
         // Œ»İ‚ÌLkó‘Ô‚ğXV
         isStretching = isPressing;
         // L‚Î‚µ‚Ä‚¢‚éó‘Ô‚©‚ç—£‚µ‚½uŠÔ‚ğ”»’è
